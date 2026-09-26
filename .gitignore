@@ -1,0 +1,37 @@
+# Java
+target/
+*.class
+*.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Node
+node_modules/
+dist/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment / secrets
+.env
+*.env
+
+# Local configuration
+application-local.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
