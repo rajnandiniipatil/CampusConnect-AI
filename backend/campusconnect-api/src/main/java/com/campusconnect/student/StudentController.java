@@ -1,10 +1,13 @@
 package com.campusconnect.student;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/students")
@@ -15,6 +18,7 @@ public class StudentController {
         this.repository = repository;
     }
 
+    @PreAuthorize("hasAnyRole('STUDENT', 'FACULTY', 'ADMIN')")
     @GetMapping
     public List<Student> getAll() {
         return repository.findAll();
@@ -27,6 +31,7 @@ public class StudentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('FACULTY', 'ADMIN')")
     @PostMapping
     public Student create(@Valid @RequestBody Student student) {
         return repository.save(student);

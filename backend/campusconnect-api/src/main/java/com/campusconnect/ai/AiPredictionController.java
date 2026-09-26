@@ -1,6 +1,7 @@
 package com.campusconnect.ai;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +15,8 @@ public class AiPredictionController {
 
     @Value("${app.ai-url:http://localhost:8000}")
     private String aiUrl;
-
+    
+    @PreAuthorize("hasAnyRole('STUDENT', 'FACULTY', 'ADMIN')")
     @PostMapping("/predict")
     public ResponseEntity<?> predict(@RequestBody Map<String, Object> features) {
         try {

@@ -1,6 +1,7 @@
 package com.campusconnect.academic;
 
 import com.campusconnect.student.StudentRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,13 @@ public class MarkController {
         this.studentRepository = studentRepository;
     }
 
+    @PreAuthorize("hasAnyRole('STUDENT', 'FACULTY', 'ADMIN')")
     @GetMapping("/student/{studentId}")
     public List<Mark> byStudent(@PathVariable Long studentId) {
         return markRepository.findByStudentId(studentId);
     }
-
+    
+    @PreAuthorize("hasAnyRole('FACULTY', 'ADMIN')")
     @PostMapping("/student/{studentId}")
     public ResponseEntity<Mark> create(@PathVariable Long studentId, @RequestBody Mark mark) {
         return studentRepository.findById(studentId).map(student -> {
