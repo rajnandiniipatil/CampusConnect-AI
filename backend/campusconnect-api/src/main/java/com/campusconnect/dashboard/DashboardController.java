@@ -1,6 +1,7 @@
 package com.campusconnect.dashboard;
 
 import com.campusconnect.academic.AttendanceRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.campusconnect.academic.MarkRepository;
 import com.campusconnect.student.StudentRepository;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class DashboardController {
         this.attendance = attendance;
         this.marks = marks;
     }
-
+    @PreAuthorize("hasAnyRole('FACULTY', 'ADMIN')")
     @GetMapping("/summary")
     public Map<String, Object> summary() {
         return Map.of(
