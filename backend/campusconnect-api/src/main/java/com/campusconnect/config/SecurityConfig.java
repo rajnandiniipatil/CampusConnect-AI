@@ -1,6 +1,8 @@
 package com.campusconnect.config;
 
 import com.campusconnect.auth.JwtAuthenticationFilter;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import com.campusconnect.auth.JwtService;
 import com.campusconnect.auth.UserRepository;
 import org.springframework.context.annotation.Bean;
@@ -28,22 +30,24 @@ public class SecurityConfig {
                 new JwtAuthenticationFilter(jwtService, userRepository);
 
         http
-                .csrf(csrf -> csrf.disable())
+        .csrf(csrf -> csrf.disable())
 
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+        .cors(Customizer.withDefaults())
 
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+            .anyRequest().authenticated()
+        )
 
-                .addFilterBefore(
-                        jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
 
+        .addFilterBefore(
+            jwtFilter,
+            UsernamePasswordAuthenticationFilter.class
+        );
         return http.build();
     }
 
